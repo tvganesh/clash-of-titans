@@ -1,0 +1,596 @@
+---
+title: "The Clash of Titans in Test and ODI cricket"
+Date: 15 March 2019
+output:
+  html_document: default
+  word_document: default
+Author: Tinniam V ganesh
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=10, fig.height=6)
+```
+
+*Who looks outside, dreams; who looks inside, awakes.*
+
+*Show me a sane man and I will cure him for you.*
+        
+                Carl Jung
+                
+*We're made of star stuff. We are a way for the cosmos to know itself.*
+
+*If you want to make an apple pie from scratch, you must first create the universe.*
+
+               Carl Sagan
+## Introduction
+The *biggest nag* in the collective psyche of cricket fraternity these days, is whether Virat Kohli has surpassed Sachin Tendulkar. This question has been troubling cricket lovers the world over and particularly in India, for quite a while. This nagging question has only grown stronger with Kohli's 41st ODI century and with Michael Vaughan bestowing the *GOAT* title to Virat Kohli for ODI cricket. Hence, I decided to do my bit in addressing this, by doing analysis of Kohli's and Tendulkar's performance in ODI cricket. I also wanted to address the the best among the cricketing idols of India  in Test cricket, namely Sunil Gavaskar, Sachin Tendulkar and Virat Kohli. Hence this post has 2 parts 
+
+1. Analysis of Tendulkar, Gavaskar and Kohli in Test cricket
+2. Analysis of Tendulkar and Kohli in ODIs
+
+In this post, I analyze the performances of these titans in Test and ODI cricket using my R package **cricketr**. While some may feel that comparisons are not possible as these batsmen are from different eras. To some extent this is true. I would give some leeway to Gavaskar as he had to bat in a pre-helmet era. But with Tendulkar and Kohli a fair and objective comparison is possible. There were pre-eminient bowlers in the times of Tendulkar as there are now.
+
+
+From the analysis below, it can be seen that Tendulkar to of everybody else in Test cricket. However it must be noted that Tendulkar's performance deteriorated towards the end of his career. Such was not the case with Gavaskar. Kohli has some catching up to do and he still has a lot of Test cricket in him. 
+
+In ODI Kohli can be seen to pulling ahead of Tendulkar in several aspects.
+
+My R package **cricketr** can be installed directly from CRAN and you can use it analyze cricketers.
+
+This package uses the statistics info available in [ESPN Cricinfo Statsguru](http://stats.espncricinfo.com/ci/engine/stats/index.html). The current version of this package supports all formats of the game including Test, ODI and
+Twenty20 versions. 
+
+You should be able to install the package from GitHub and use the many functions available in the package. Please mindful of the [ESPN Cricinfo Terms of Use](http://www.espncricinfo.com/ci/content/site/company/terms_use.html) 
+
+Take a look at my short video tutorial on my R package cricketr on Youtube - [R package cricketr - A short tutorial](https://www.youtube.com/edit?o=U&video_id=q9uMPFVsXsI)
+
+Do check out my interactive Shiny app implementation using the cricketr package - [Sixer - R package cricketr's new Shiny avatar](https://tvganesh.shinyapps.io/Sixer)
+
+**Note 1**: If you would like to do a similar analysis for a different set of batsman and bowlers, you can clone/download my skeleton [cricketr template](https://github.com/tvganesh/cricketr-template) from Github (which is the R Markdown file I have used for the analysis below).
+
+**Note 2**: I sprinkle the charts with my observations. Feel free to look at them more closely and come to your conclusions.
+
+**Important note**: Do check out the python avatar of cricketr, 'cricpy' in my post [Introducing cricpy:A python package to analyze performances of cricketers](https://gigadom.in/2018/10/28/introducing-cricpya-python-package-to-analyze-performances-of-cricketrs/)
+
+- This post is also available at Rpubs [Clash of the Titans](http://rpubs.com/tvganesh/476500)
+- You can download this in PDF format at [Clash of the Titans](https://drive.google.com/open?id=1kT2f0QzK8UpAmCjMQ9KYqUv6LPTPOx7k)
+- You can download this R Markdown file from Github at [Clash of titans]()
+
+###1 Load the cricketr package
+```{r message=FALSE,warning=FALSE}
+if (!require("cricketr")){
+    install.packages("cricketr",lib = "c:/test")
+}
+library(cricketr)
+
+```
+
+##A Test cricket analysis
+###2. Get player data
+```{r}
+tendulkar <- getPlayerData(35320,dir=".",file="tendulkar.csv",type="batting")
+kohli <- getPlayerData(253802,dir=".",file="kohli.csv",type="batting")
+gavaskar <- getPlayerData(28794,dir=".",file="gavaskar.csv",type="batting")
+
+```
+
+###3a. Basic analyses for Tendulkar
+```{r tendulkar-batting,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsmanRunsFreqPerf("./tendulkar.csv","Tendulkar")
+batsmanMeanStrikeRate("./tendulkar.csv","Tendulkar")
+batsmanRunsRanges("./tendulkar.csv","Tendulkar")
+
+dev.off()
+```
+
+###3b Basic analyses for Kohli
+```{r kohli-batting,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsmanRunsFreqPerf("./kohli.csv","Kohli")
+batsmanMeanStrikeRate("./kohli.csv","Kohli")
+batsmanRunsRanges("./kohli.csv","Kohli")
+
+dev.off()
+```
+
+
+###3c Basic analyses for Gavaskar
+
+```{r gavaskar-batting,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsmanRunsFreqPerf("./gavaskar.csv","Gavaskar")
+batsmanMeanStrikeRate("./gavaskar.csv","Gavaskar")
+batsmanRunsRanges("./gavaskar.csv","Gavaskar")
+
+dev.off()
+```
+
+###4a.More analyses for Tendulkar
+It can be seen that Tendulkar and Gavaskar has been bowled more often than Kohli. Also Kohli does not have as many sixes in Test cricket as Tendulkar and Gavaskar
+```{r tendulkar-4s6s,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsman4s("./tendulkar.csv","Tendulkar")
+batsman6s("./tendulkar.csv","Tendulkar")
+batsmanDismissals("./tendulkar.csv","Tendulkar")
+
+dev.off()
+```
+
+### 4b. More analyses for Kohli
+```{r kohli-4s6s,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsman4s("./kohli.csv","Kohli")
+batsman6s("./kohli.csv","Kohli")
+batsmanDismissals("./kohli.csv","Kohli")
+
+dev.off()
+```
+
+
+### 4c More analyses for Gavaskar
+
+```{r gavaskar-4s6s,message=FALSE, cache=TRUE}
+par(mfrow=c(1,3))
+par(mar=c(4,4,2,2))
+batsman4s("./gavaskar.csv","Gavaskar")
+batsman6s("./gavaskar.csv","Gavaskar")
+batsmanDismissals("./gavaskar.csv","Gavaskar")
+
+dev.off()
+```
+
+###5 Performance of batsmen on different grounds
+```{r ground,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanAvgRunsGround("./tendulkar.csv","Tendulkar")
+batsmanAvgRunsGround("./kohli.csv","Kohli")
+batsmanAvgRunsGround("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+
+###6. Performance if batsmen against different Opposition
+
+1. Tendulkar averages 50 against the following countries - Australia, Bangladesh, England, Sri Lanka, West Indies and Zimbabwe
+2. Kohli average almost 50 against all the nations he has played - Australia, Bangladesh, England, New Zealand, Sri Lanka and West Indies
+3. Gavaskar averages 50 against Australia, Pakistan, West Indies, Sri Lanka
+
+```{r oppn,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanAvgRunsOpposition("./tendulkar.csv","Tendulkar")
+batsmanAvgRunsOpposition("./kohli.csv","Kohli")
+batsmanAvgRunsOpposition("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+
+
+### 7.  Get player data special
+This is required for the next 2 function calls
+
+```{r message=FALSE, cache=TRUE}
+
+tendulkarsp <- getPlayerDataSp(35320,tdir=".",tfile="tendulkarsp.csv",ttype="batting")
+kohlisp <- getPlayerDataSp(253802,tdir=".",tfile="kohlisp.csv",ttype="batting")
+gavaskarsp <- getPlayerDataSp(28794,tdir=".",tfile="gavaskarsp.csv",ttype="batting")
+
+#dev.off()
+```
+
+### 8 Get contribution of batsmen in matches won and lost
+Kohli contribution has had an equal contribution in won and lost matches. Tendulkar's
+runs seem to have not helped in winning as much as only 50% of matches he has played have been won
+```{r winlost,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+
+batsmanContributionWonLost("tendulkarsp.csv","Tendulkar")
+batsmanContributionWonLost("./kohlisp.csv","Kohli")
+batsmanContributionWonLost("./gavaskarsp.csv","Gavaskar")
+
+#dev.off()
+```
+
+### 9  Performance of batsmen at home and overseas
+The boxplots show that Kohli performs better overseas than at home. The 3rd quartile is higher, though the median seems to lower overseas. For Tendulkar the performance is similar both ways. Gavaskar's median runs scored overseas is higher.
+```{r ha,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+
+
+batsmanPerfHomeAway("tendulkarsp.csv","Tendulkar")
+batsmanPerfHomeAway("./kohlisp.csv","Kohli")
+batsmanPerfHomeAway("./gavaskarsp.csv","Gavaskar")
+
+#dev.off()
+```
+
+###10. Moving average of runs
+Gavaskar's moving average was very good at the time of his retirement. Kohli seems to be going very strong. Tendulkar's performance shows signs of deterioration around the time of his retirement.
+```{r ma,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+
+batsmanMovingAverage("./tendulkar.csv","Tendulkar")
+batsmanMovingAverage("./kohli.csv","Kohli")
+batsmanMovingAverage("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+
+###11 Boxplot and  histogram of runs
+Kohli has a marginally higher average (50.69) than Tendulkar (48.65) while Gavaskar 46. The median runs are same for Tendulkar and Kohli at 32 
+```{r perfboxhist,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+batsmanPerfBoxHist("./tendulkar.csv","Sachin Tendulkar")
+batsmanPerfBoxHist("./kohli.csv","Kohli")
+batsmanPerfBoxHist("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+###12 Cumulative average Runs for batsmen
+Looking at the cumulative average runs we can see a gradual drop in the cumulative average for Tendulkar while Kohli and Gavaskar's performance seems to be getting better
+```{r car,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+batsmanCumulativeAverageRuns("./tendulkar.csv","Tendulkar")
+batsmanCumulativeAverageRuns("./kohli.csv","Kohli")
+batsmanCumulativeAverageRuns("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+###13. Cumulative average strike  rate of batsmen
+Tendulkar's strike rate is better than Kohli and Gavaskar
+```{r csr,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+batsmanCumulativeStrikeRate("./tendulkar.csv","Tendulkar")
+batsmanCumulativeStrikeRate("./kohli.csv","Kohli")
+batsmanCumulativeStrikeRate("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+
+###14 Performance forecast of batsmen
+The forecasted performance  for Kohli and Gavaskar is higher than that of Tendulkar
+```{r fcst,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+batsmanPerfForecast("./tendulkar.csv","Sachin Tendulkar")
+batsmanPerfForecast("./kohli.csv","Kohli")
+batsmanPerfForecast("./gavaskar.csv","Gavaskar")
+
+#dev.off()
+```
+
+### 15.  Relative strike rate of batsmen
+```{r rsr,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkar.csv","./kohli.csv","gavaskar.csv")
+names <- list("Tendulkar","Kohli","Gavaskar")
+relativeBatsmanSR(frames,names)
+#dev.off()
+```
+
+
+###16. Relative Runs frequency of batsmen
+```{r rrunfreq,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+frames <- list("./tendulkar.csv","./kohli.csv","gavaskar.csv")
+names <- list("Tendulkar","Kohli","Gavaskar")
+relativeRunsFreqPerf(frames,names)
+#dev.off()
+```
+
+###17.  Relative cumulative average runs of batsmen
+Tendulkar leads the way here, but it can be seem Kohli catching up.
+```{r rcar,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+frames <- list("./tendulkar.csv","./kohli.csv","gavaskar.csv")
+names <- list("Tendulkar","Kohli","Gavaskar")
+relativeBatsmanCumulativeAvgRuns(frames,names)
+#dev.off()
+```
+
+###18.  Relative cumulative average strike rate
+Tendulkar has better strike rate than the other two.
+```{r rcsr,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+frames <- list("./tendulkar.csv","./kohli.csv","gavaskar.csv")
+names <- list("Tendulkar","Kohli","Gavaskar")
+relativeBatsmanCumulativeStrikeRate(frames,names)
+#dev.off()
+```
+
+### 19.  Check batsman in form
+As in the moving average and performance forecast and cumulative average runs,
+Kohli and Gavaskar are in-form while Tendulkar was out-of-form towards the end.
+```{r form,message=FALSE, cache=TRUE}
+checkBatsmanInForm("./tendulkar.csv","Sachin Tendulkar")
+checkBatsmanInForm("./kohli.csv","Kohli")
+checkBatsmanInForm("./gavaskar.csv","Gavaskar")
+#dev.off()
+```
+
+###20.  Performance 3D
+A 3D regression plane is fitted between the the Balls faced, Minutes at crease
+and Runs scored
+```{r 3d,message=FALSE, cache=TRUE}
+par(mfrow=c(2,2))
+par(mar=c(4,4,2,2))
+battingPerf3d("./tendulkar.csv","Sachin Tendulkar")
+battingPerf3d("./kohli.csv","Kohli")
+battingPerf3d("./gavaskar.csv","Gavaskar")
+#dev.off()
+```
+
+
+###20. Runs likelihood
+This functions computes the K-Means and determines the  runs the batsmen are likely to score.
+
+```{r likely,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanRunsLikelihood("./tendulkar.csv","Tendulkar")
+batsmanRunsLikelihood("./kohli.csv","Kohli")
+batsmanRunsLikelihood("./gavaskar.csv","Gavaskar")
+#dev.off()
+```
+
+
+
+###21.  Predict runs for a random combination of Balls faced and runs scored
+```{r message=FALSE, cache=TRUE}
+BF <- seq( 10, 400,length=15)
+Mins <- seq(30,600,length=15)
+newDF <- data.frame(BF,Mins)
+tendulkar <- batsmanRunsPredict("./tendulkar.csv","Tendulkar",newdataframe=newDF)
+kohli <- batsmanRunsPredict("./kohli.csv","Kohli",newdataframe=newDF)
+gavaskar <- batsmanRunsPredict("./gavaskar.csv","Gavaskar",newdataframe=newDF)
+batsmen <-cbind(round(tendulkar$Runs),round(kohli$Runs),round(gavaskar$Runs))
+colnames(batsmen) <- c("Tendulkar","Kohli","Gavaskar")
+newDF <- data.frame(round(newDF$BF),round(newDF$Mins))
+colnames(newDF) <- c("BallsFaced","MinsAtCrease")
+predictedRuns <- cbind(newDF,batsmen)
+predictedRuns
+#dev.off()
+```
+## Key findings
+1. Kohli has a marginally higher average than Tendulkar
+2. Tendulkar has the best strike rate of all the 3.
+3. The cumulative average runs and the performance forecast for Kohli and Gavaskar show an improving trend,  while Tendulkar's numbers deteriorate towards the end of his career
+4. Kohli is fast catching up Tendulkar on cumulative average runs vs innings in career.
+
+
+
+
+##B ODI
+The functions below get the ODI data for Tendulkar and Kohli as CSV files
+so that the analyses can be done
+
+###22 Get player data for ODIs
+```{r message=FALSE, cache=TRUE}
+tendulkarOD <- getPlayerDataOD(35320,dir=".",file="tendulkarOD.csv",type="batting")
+kohliOD <- getPlayerDataOD(253802,dir=".",file="kohliOD.csv",type="batting")
+
+#dev.off()
+```
+
+
+###23a Basic performance of  Tendulkar in ODI
+```{r perften,message=FALSE, cache=TRUE}
+par(mfrow=c(3,2))
+par(mar=c(4,4,2,2))
+batsmanRunsFreqPerf("./tendulkarOD.csv","Tendulkar")
+batsmanRunsRanges("./tendulkarOD.csv","Tendulkar")
+batsman4s("./tendulkarOD.csv","Tendulkar")
+batsman6s("./tendulkarOD.csv","Tendulkar")
+batsmanScoringRateODTT("./tendulkarOD.csv","Tendulkar")
+#dev.off()
+```
+
+###23b. Basic  performance of Kohli in ODI
+
+```{r perkoh,message=FALSE, cache=TRUE}
+par(mfrow=c(3,2))
+par(mar=c(4,4,2,2))
+batsmanRunsFreqPerf("./kohliOD.csv","Kohli")
+batsmanRunsRanges("./kohliOD.csv","Kohli")
+batsman4s("./kohliOD.csv","Kohli")
+batsman6s("./kohliOD.csv","Kohli")
+batsmanScoringRateODTT("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+
+###24. Performance forecast in ODIs
+Kohli's forecasted runs are much higher than Tendulkar's in ODIs
+```{r forecast,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanPerfForecast("./tendulkarOD.csv","Tendulkar")
+batsmanPerfForecast("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+
+###25. Batting performance
+A 3D regression plane is fitted between Balls faced, Minutes at crease and Runs scored.
+```{r 3d1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+battingPerf3d("./tendulkarOD.csv","Tendulkar")
+battingPerf3d("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+
+###26. Predicting runs scored for the ODI batsmen
+Kohli will score runs than Tendulkar for the same minutes at crease and balls faced.
+```{r message=FALSE, cache=TRUE}
+BF <- seq( 10, 200,length=10)
+Mins <- seq(30,220,length=10)
+newDF <- data.frame(BF,Mins)
+tendulkarDF <- batsmanRunsPredict("./tendulkarOD.csv","Tendulkar",newdataframe=newDF)
+kohliDF <- batsmanRunsPredict("./kohliOD.csv","Kohli",newdataframe=newDF)
+batsmen <-cbind(round(tendulkarDF$Runs),round(kohliDF$Runs))
+colnames(batsmen) <- c("Tendulkar","Kohli")
+newDF <- data.frame(round(newDF$BF),round(newDF$Mins))
+colnames(newDF) <- c("BallsFaced","MinsAtCrease")
+predictedRuns <- cbind(newDF,batsmen)
+predictedRuns
+
+```
+
+
+###27. Runs likelihood for the ODI batsmen
+Tendulkar has clusters around 13, 53 and 111 runs while Kohli has clusters around
+13, 63,116. So it more likely that Kohli will tend to score higher
+```{r likely1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanRunsLikelihood("./tendulkarOD.csv","Tendulkar")
+batsmanRunsLikelihood("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+
+###28. Runs in different venues for the ODI batsmen
+```{r ground1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanAvgRunsGround("./tendulkarOD.csv","Tendulkar")
+batsmanAvgRunsGround("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+###28. Runs against different opposition for the ODI batsmen
+Tendulkar's has  50+ average against Bermuda, Kenya and Namibia. While Kohli has a 50+ average against New Zealand, West Indies, South Africa, Zimbabwe and Bangladesh
+```{r oppn1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanAvgRunsOpposition("./tendulkarOD.csv","Tendulkar")
+batsmanAvgRunsOpposition("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+###29. Moving average of runs for the ODI batsmen
+Tendulkar's moving average shows an improvement (50+) towards the end of his career, but Kohli shows a marked increase 60+ currently
+```{r ma1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanMovingAverage("./tendulkarOD.csv","Tendulkar")
+batsmanMovingAverage("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+###30. Cumulative average runs of ODI batsmen
+Tendulkar plateaus at 40+ while Kohli's cumulative average runs goes up and up!!!
+```{r ca1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanCumulativeAverageRuns("./tendulkarOD.csv","Tendulkar")
+batsmanCumulativeAverageRuns("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+###31 Cumulative strike rate of ODI batsmen
+```{r csr1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+batsmanCumulativeStrikeRate("./tendulkarOD.csv","Tendulkar")
+batsmanCumulativeStrikeRate("./kohliOD.csv","Kohli")
+#dev.off()
+```
+
+###32. Relative batsmen strike rate
+```{r rsr1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkarOD.csv","./kohliOD.csv")
+names <- list("Tendulkar","Kohli")
+relativeBatsmanSRODTT(frames,names)
+#dev.off()
+```
+
+###33. Relative Run Frequency percentages
+```{r rrunfreq1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkarOD.csv","./kohliOD.csv")
+names <- list("Tendulkar","Kohli")
+relativeRunsFreqPerfODTT(frames,names)
+#dev.off()
+```
+
+###34. Relative cumulative average runs of ODI batsmen
+Kohli breaks away from Tendulkar in cumulative average runs after 100 innings
+```{r rca1,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkarOD.csv","./kohliOD.csv")
+names <- list("Tendulkar","Kohli")
+relativeBatsmanCumulativeAvgRuns(frames,names)
+#dev.off()
+```
+
+###35. Relative cumulative strike rate of ODI batsmen
+This seems to be tussle with Kohli having an edge till about 40 innings and then from 40+ to 180 innings Tendulkar leads. Kohli just seems to be edging forward.
+```{r rsr2,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkarOD.csv","./kohliOD.csv")
+names <- list("Tendulkar","Kohli")
+relativeBatsmanCumulativeStrikeRate(frames,names)
+#dev.off()
+```
+
+###36.  Batsmen 4s and 6s
+```{r 4s6s,message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+frames <- list("./tendulkarOD.csv","./kohliOD.csv")
+names <- list("Tendulkar","Kohli")
+batsman4s6s(frames,names)
+#dev.off()
+```
+
+###37. Check ODI batsmen form
+```{r message=FALSE, cache=TRUE}
+par(mar=c(4,4,2,2))
+
+checkBatsmanInForm("./tendulkar.csv","Tendulkar")
+checkBatsmanInForm("./kohli.csv","Kohli")
+#dev.off()
+```
+
+
+
+## Key Findings
+
+1. Kohli has a better performance against oppositions like West Indies, South Africa and New Zealand
+2. Kohli breaks away from Tendulkar in cumulative average runs
+3. Tendulkar has been leading the strike rate rate but Kohli in recent times seems to  be breaking loose.
+
+
+
+Also see
+
+1. [My book 'Practical Machine Learning in R and Python: Third edition' on Amazon](https://gigadom.in/2019/01/02/my-book-practical-machine-learning-in-r-and-python-third-edition-on-amazon/)
+2. [A primer on Qubits, Quantum gates and Quantum Operations](https://gigadom.in/2016/06/01/a-primer-on-qubits-quantum-gates-and-quantum-operations/)
+3. [De-blurring revisited with Wiener filter using OpenCV](https://gigadom.in/2011/11/22/de-blurring-revisited-with-wiener-filter-using-opencv/)
+4. [Deep Learning from first principles in Python, R and Octave - Part 4](https://gigadom.in/2018/02/26/deep-learning-from-first-principles-in-python-r-and-octave-part-4/)
+5. [The Many Faces of Latency](https://gigadom.in/2011/04/26/the-many-faces-of-latency/)
+6. [Fun simulation of a Chain in Android](https://gigadom.in/2013/06/26/fun-simulation-of-a-chain-in-android/)
+7. [Presentation on Wireless Technologies - Part 1](https://gigadom.in/2013/07/24/presentation-on-wireless-technologies-part-1/)
+8. [yorkr crashes the IPL party ! - Part 1](https://gigadom.in/2016/04/19/yorkr-crashes-the-ipl-party-part-1/)
+
+To see all posts click [Index of posts](https://gigadom.in/aa-2/)
+
+
+
